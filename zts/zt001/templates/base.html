@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Awesome works</title>
+  </head>
+  <body>
+
+    {% block header %}
+    <div class="header">
+      I'm the Header from base
+    </div>
+    {% endblock %}
+
+    {% block content %}
+    <p>You should write own content in sub pages</p>
+    {% endblock %}
+
+    {% block footer %}
+    <div class="footer">
+      I'm the Footer from base
+    </div>
+    {% endblock %}
+  </body>
+</html>

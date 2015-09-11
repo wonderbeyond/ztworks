@@ -29,8 +29,17 @@ fs.readdirSync(ztBaseDir).map(function(ztName) {
 })
 
 gulp.task('default', taskListing);
+
+// A task to compile all zt's templates
 gulp.task('templates', ztNames.map(function(n) {return util.format('%s.%s', n, 'templates')}));
 
 gulp.task('watch', function(){
-  gulp.watch(path.join(ztBaseDir, '**/templates/*.html'), ['templates']);
+  // Do separated watch for every zt
+  ztNames.map(function(ztName) {
+    var src = [
+      path.join(ztBaseDir, ztName, 'templates', '*.html'),
+      path.join(ztBaseDir, ztName, 'templates', '**/*.html'),
+    ]
+    gulp.watch(src, [util.format('%s.templates', ztName)]);
+  });
 });

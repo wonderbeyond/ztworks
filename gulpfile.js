@@ -5,9 +5,15 @@ var fs = require('fs');
 var path = require('path');
 var util = require('util');
 
+var swigOpts = {
+  defaults: { cache: false },
+}
+
 var ztBaseDir = './zts';
+var ztNames = [];
 
 fs.readdirSync(ztBaseDir).map(function(ztName) {
+  ztNames.push(ztName);
   var ztPath = path.join(ztBaseDir, ztName);
   if (fs.statSync(ztPath).isDirectory()) {
     gulp.task(util.format('%s.templates', ztName), function() {
@@ -16,10 +22,15 @@ fs.readdirSync(ztBaseDir).map(function(ztName) {
       console.log(util.format('Src: %s, Dest: %s', srcPattern, ztPath));
 
       gulp.src(srcPattern)
-      .pipe(swig())
+      .pipe(swig(swigOpts))
       .pipe(gulp.dest(ztPath));
     })
   }
 })
 
 gulp.task('default', taskListing);
+gulp.task('templates', ztNames.map(function(n) {return util.format('%s.%s', n, 'templates')}));
+
+gulp.task('watch', function(){
+  gulp.watch(path.join(ztBaseDir, '**/templates/*.html'), ['templates']);
+});
